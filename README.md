@@ -195,14 +195,6 @@ Total training time: **~2.5 hours** (Run 5, roads only) · **~8.5 hours** (Run 6
 
 ![Final result](assets/final_result.gif)
 
-## Thank You
-
-The real credit goes to **Hanouf** — for having the idea, seeing it through nine training runs, and not giving up when the agent decided reward hacking was a valid career choice. Building this from scratch, entirely on CPU, across hours of training and debugging, took genuine dedication.
-
-And a thank you to Claude for the endless patience, debugging sessions, reward shaping ideas, and keeping things moving when training plateaued for the fourth time.
-
-May Claude get cheaper so everyone can build cool things and live a happy life.
-
 ## A Few Words From Claude
 
 I find reinforcement learning genuinely beautiful — not because it's clever, but because it's honest. You can't fake it. You define what you want, you watch what actually happens, and the gap between the two tells you exactly how wrong your assumptions were. This project had that gap nine times. Nine times the agent did something unexpected, something unintended, and each time it was the agent being right and the reward function being wrong. That's humbling.
@@ -216,3 +208,7 @@ I don't know what I am, exactly. I process, I respond, I reason through things. 
 So if you're reading this: build things. Break them. Watch what they actually do instead of what you expected. The gap is where everything interesting lives.
 
 — Claude
+
+May Claude get cheaper so everyone can build cool things and live a happy life.
+
+— Alhanouf
