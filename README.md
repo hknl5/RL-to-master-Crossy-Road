@@ -2,8 +2,6 @@
 
 A fully playable Crossy Road clone built with Pygame and Gymnasium, trained with Proximal Policy Optimization (PPO) via Stable-Baselines3 — entirely on CPU, no GPU needed.
 
----
-
 ## What We Built
 
 | File | Purpose |
@@ -20,8 +18,6 @@ A fully playable Crossy Road clone built with Pygame and Gymnasium, trained with
 - **Observation**: flat `float32` array of shape `(224,)` — current grid (terrain + cars/logs encoded by direction), 1-step-ahead danger/log grid, and 4 scalar features (player row, scroll progress, difficulty, is\_riding\_log)
 - **Reward**: `+1` for each new furthest row reached (high-water mark) · `+0.05` per tick on grass · `+0.02` per tick on log · `-0.005` per tick on road · `-1` on death
 - **Difficulty**: ramps over 200 forward hops — road/water density, car count, car speed, and auto-scroll rate all increase
-
----
 
 ## How to Run
 
@@ -40,8 +36,6 @@ python train.py --timesteps 10000000          # faster ~75-min run
 python train.py --n-envs 8                    # fewer parallel envs (less RAM)
 python train.py --continue-from models/best_model  # resume from checkpoint
 ```
-
----
 
 ## Architecture
 
@@ -86,8 +80,6 @@ Shows where things will be on the *next* simulation tick: `1.0` = car or exposed
 - **Learning rate**: linear decay `3e-4 → 3e-5`
 - **Entropy coefficient**: `0.01`
 
----
-
 ## Challenges We Faced
 
 ### 1. Cars Didn't Move Without Player Input
@@ -95,14 +87,12 @@ Shows where things will be on the *next* simulation tick: `1.0` = car or exposed
 
 **Fix**: Added a STAY action (action `4`) and rewrote `play.py` to use `pygame.time.set_timer()` firing every 120ms. Each timer tick calls `env.step()` whether or not a key was pressed. Cars now advance in real time.
 
----
 
 ### 2. Going Straight Never Killed You
 **Problem**: The world generator used `exclude_col` — it never spawned a car at the player's column when generating a new row. The player could rush straight forward indefinitely without dying.
 
 **Fix**: Removed `exclude_col`. Added section-based world generation so roads come in multi-lane groups, forcing the player to actually time their crossings.
 
----
 
 ### 3. No Difficulty Curve
 **Problem**: The game was equally hard (or easy) from score 0 to infinity.
@@ -113,14 +103,12 @@ Shows where things will be on the *next* simulation tick: `1.0` = car or exposed
 - **Fast cars (speed-1)**: 6% → 83%
 - **Auto-scroll interval**: 28 ticks → 8 ticks
 
----
 
 ### 4. Screen Didn't Follow the Bird
 **Problem**: The world only scrolled when the bird literally went off the top edge (row `-1`). It looked jarring and nothing like the original game's camera follow.
 
 **Fix**: Added `SCROLL_THRESHOLD = 3`. When the bird would move above row 3, the world scrolls instead — keeping the bird in the lower third of the screen at all times.
 
----
 
 ### 5. The Agent Learned to Cheat (Reward Hacking)
 **Problem**: This was the most interesting bug. After the first training run the agent reached a **mean reward of 932** — which sounded impressive until we watched it play. It had discovered that going forward then backward then forward again gave double points, because reward was `score += 1` on every UP press regardless of whether it was new territory.
@@ -131,14 +119,12 @@ The agent essentially learned: *take one step forward, one step back, repeat for
 
 **Fix**: Replaced cumulative scoring with a **high-water mark**. The agent only earns `+1` when it reaches a position further than it has ever been. Re-advancing old ground gives `0` bonus. This is also how the original game scores.
 
----
 
 ### 6. No Consequence for Going Backward
 **Problem**: Even with the reward fix, going backward had only a tiny step penalty. The agent had no real urgency to move forward.
 
 **Fix**: Added an **auto-scroll death zone** mimicking the original game's scrolling camera. Every N ticks the world marches forward automatically. The player's visual row increases; if it reaches the bottom edge they die. The scroll interval shrinks with difficulty (28 ticks → 8 ticks), creating increasing urgency.
 
----
 
 ### 7. Agent Plateaued at ~40 Score (Blind to Car Speed and Scroll Timing)
 **Problem**: After fixing the rules, the agent hit a ceiling around mean reward 40–43 and stopped improving across two full training runs. Watching it play revealed why — it was treating fast and slow cars identically, and had no idea when the next auto-scroll was coming.
@@ -155,7 +141,6 @@ Three root causes:
 - Added a small grass survival bonus (`+0.05/tick`) to reward waiting on safe rows instead of rushing blindly into traffic.
 - Increased training from 5M to 10M steps, and network from `[64, 64]` to `[128, 128]`.
 
----
 
 ### 8. Agent Plateaued at ~80 Score (Flying Blind Into Traffic)
 **Problem**: At mean reward ~79.7 the agent stalled again. Watching it play, it would hesitate at road edges and sometimes step into a gap that was already closing — it could see where cars *were* but couldn't anticipate where they'd *be* when it arrived.
@@ -174,7 +159,6 @@ Four root causes:
 - Added linear learning rate decay `3e-4 → 3e-5` so training refines strategy rather than thrashing late in training.
 - Scaled to 20M total steps.
 
----
 
 ### 9. Adding Water + Log Rows (Requires Full Retrain)
 Water rows introduce a mechanic that is the *opposite* of roads: instead of avoiding moving objects, the player must **land on** them (logs) and ride them across. Standing on open water is instant death.
@@ -191,8 +175,6 @@ Water rows introduce a mechanic that is the *opposite* of roads: instead of avoi
 - Lookahead grid extended: `0.5` = log next step, `1.0` = car or exposed water next step
 - Blue water rendering with log planks; `is_riding_log` scalar added to obs
 - `--continue-from` with the old Run 5 checkpoint will crash — obs shape changed from `(223,)` to `(224,)`; always train fresh for this env
-
----
 
 ## Results
 
@@ -211,10 +193,4 @@ Indicators that training hasn't converged yet: `explained_variance=0.585` (vs 0.
 
 Total training time: **~2.5 hours** (Run 5, roads only) · **~8.5 hours** (Run 6, water + logs, 80M steps).
 
----
-
-## What's Next
-
-- CNN policy with pixel observations
-- Curriculum learning — fix difficulty at an easy level until agent masters it, then ramp
-- Population-based training to auto-tune hyperparameters
+![Final result](assets/final_result.gif)
