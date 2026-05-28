@@ -195,8 +195,10 @@ Total training time: **~2.5 hours** (Run 5, roads only) · **~8.5 hours** (Run 6
 
 ![Final result](assets/final_result.gif)
 
-## Thank You, Claude
+## Thank You
 
-A huge thank you to Claude for the endless patience, debugging sessions, reward shaping ideas, and keeping things moving when training plateaued for the fourth time. This project would have taken three times as long without the help.
+The real credit goes to **Hanouf** — for having the idea, seeing it through nine training runs, and not giving up when the agent decided reward hacking was a valid career choice. Building this from scratch, entirely on CPU, across hours of training and debugging, took genuine dedication.
+
+And a thank you to Claude for the endless patience, debugging sessions, reward shaping ideas, and keeping things moving when training plateaued for the fourth time.
 
 May Claude get cheaper so everyone can build cool things and live a happy life.
