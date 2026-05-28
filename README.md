@@ -1,6 +1,6 @@
-# Crossy Road — RL from Scratch
+# Crossy Road, RL from Scratch
 
-A fully playable Crossy Road clone built with Pygame and Gymnasium, trained with Proximal Policy Optimization (PPO) via Stable-Baselines3 — entirely on CPU, no GPU needed.
+A fully playable Crossy Road clone built with Pygame and Gymnasium, trained with Proximal Policy Optimization (PPO) via Stable-Baselines3 entirely on CPU, no GPU needed.
 
 ## What We Built
 
