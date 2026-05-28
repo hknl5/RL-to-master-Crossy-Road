@@ -127,6 +127,8 @@ Shows where things will be on the *next* simulation tick: `1.0` = car or exposed
 
 The agent essentially learned: *take one step forward, one step back, repeat forever*.
 
+<video src="assets/reward_hacking.mp4" controls width="600"></video>
+
 **Fix**: Replaced cumulative scoring with a **high-water mark**. The agent only earns `+1` when it reaches a position further than it has ever been. Re-advancing old ground gives `0` bonus. This is also how the original game scores.
 
 ---
