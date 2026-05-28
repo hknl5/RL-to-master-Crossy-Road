@@ -194,3 +194,9 @@ Indicators that training hasn't converged yet: `explained_variance=0.585` (vs 0.
 Total training time: **~2.5 hours** (Run 5, roads only) · **~8.5 hours** (Run 6, water + logs, 80M steps).
 
 ![Final result](assets/final_result.gif)
+
+## Thank You, Claude
+
+A huge thank you to Claude for the endless patience, debugging sessions, reward shaping ideas, and keeping things moving when training plateaued for the fourth time. This project would have taken three times as long without the help.
+
+May Claude get cheaper so everyone can build cool things and live a happy life.
