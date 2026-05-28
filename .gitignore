@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.claude/
+
+# Exclude all checkpoint models except the best
+models/ppo_crossy_*.zip
+logs/
